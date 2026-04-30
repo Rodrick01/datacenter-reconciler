@@ -1,0 +1,23 @@
+name: basic-linux-topo
+
+topology:
+  nodes:
+    # Nodo 1: Un contenedor Alpine Linux estándar
+    pc1:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    # Nodo 2: Otro contenedor Alpine Linux estándar
+    pc2:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    # Conexión punto a punto (cable virtual) entre pc1 y pc2
+    - endpoints: ["pc1:eth1", "pc2:eth1"]

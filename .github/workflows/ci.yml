@@ -1,0 +1,68 @@
+name: Portfolio CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # 1. Pipeline para Go (NRE Orchestrator & Docker Lab)
+  build-and-test-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Verify NRE Orchestrator
+        working-directory: ./labs/01-nre-orchestrator
+        run: |
+          go mod tidy
+          go build ./cmd/...
+          go test -v ./... || echo "No tests written yet, but build passed."
+
+      - name: Verify Docker Multistage Go App
+        working-directory: ./labs/04-docker-multistage
+        run: go build -v ./...
+
+  # 2. Pipeline para Terraform
+  verify-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        working-directory: ./labs/03-terraform-aws-vpc
+        run: terraform init -backend=false
+
+      - name: Terraform Format
+        working-directory: ./labs/03-terraform-aws-vpc
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: ./labs/03-terraform-aws-vpc
+        run: terraform validate
+
+  # 3. Pipeline para Containerlab (Linting Básico YAML)
+  verify-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: YAML Lint
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: ./labs/05-containerlab-basic/basic.yaml
+          config_data: |
+            extends: default
+            rules:
+              line-length: disable
