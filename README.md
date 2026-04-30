@@ -57,11 +57,24 @@ The networking logic pushes toward a mathematically deterministic infrastructure
 
 ### Prerequisites
 *   Docker & Docker Compose
+*   [Containerlab](https://containerlab.dev/) (For spinning up network topologies)
 *   Go 1.22+
 
-### Running the Environment
+### 📂 Labs Repository (`/labs`)
 
-1.  **Spin up the Fabric:**
+This project acts as a centralized repository for various network laboratory topologies:
+1.  **`topology.yaml` (Root)**: The baseline Nokia SR Linux Spine-Leaf Fabric.
+2.  **`labs/mikrotik-ospf-mesh/`**: A 4-node MikroTik RouterOS v7 mesh topology running OSPF. Designed to demonstrate fast-convergence, OSPF interface templates, and Zero-Touch provisioning via `.rsc` configuration scripts.
+
+To deploy any lab, navigate to its directory and run:
+```bash
+sudo containerlab deploy -t topology.yaml
+```
+
+### Running the Orchestrator (Go)
+
+1.  **Spin up the NetBox SSoT:**
+
     ```bash
     docker-compose up -d
     ```

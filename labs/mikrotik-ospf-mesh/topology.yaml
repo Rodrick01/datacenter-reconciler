@@ -1,0 +1,33 @@
+name: mikrotik-mesh
+topology:
+  kinds:
+    routeros:
+      # Imagen típica para emular MikroTik CHR v7 en vrnetlab / containerlab
+      image: vrnetlab/vr-routeros:7.14.2
+  nodes:
+    R1:
+      kind: routeros
+      binds:
+        - R1-startup.rsc:/config/startup.rsc:ro
+    R2:
+      kind: routeros
+      binds:
+        - R2-startup.rsc:/config/startup.rsc:ro
+    R3:
+      kind: routeros
+      binds:
+        - R3-startup.rsc:/config/startup.rsc:ro
+    R4:
+      kind: routeros
+      binds:
+        - R4-startup.rsc:/config/startup.rsc:ro
+
+  links:
+    # R1 a sus vecinos (Mesh Parcial)
+    - endpoints: ["R1:eth1", "R2:eth1"]
+    - endpoints: ["R1:eth2", "R3:eth1"]
+    # R2 a sus vecinos
+    - endpoints: ["R2:eth2", "R4:eth1"]
+    - endpoints: ["R2:eth3", "R3:eth2"]
+    # R3 a R4
+    - endpoints: ["R3:eth3", "R4:eth2"]
