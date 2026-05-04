@@ -1,0 +1,20 @@
+name: mikrotik-edge-lab
+
+topology:
+  kinds:
+    linux:
+      image: alpine:latest
+    vr-ros:
+      # Asume que el usuario tiene la imagen pre-buildeada de vrnetlab para RouterOS v7
+      # También se puede usar el contenedor oficial de mikrotik si está disponible
+      image: vrnetlab/vr-routeros:7.14
+  nodes:
+    router1:
+      kind: vr-ros
+    isp1:
+      kind: linux
+    isp2:
+      kind: linux
+  links:
+    - endpoints: ["router1:eth1", "isp1:eth1"]
+    - endpoints: ["router1:eth2", "isp2:eth1"]

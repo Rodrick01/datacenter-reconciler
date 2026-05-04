@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'gobgp'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['g2:2112', 'rs:2112']
+        labels:
+          # Para identificar a qué router le estamos sacando métricas en Grafana
+          cluster: 'ixp-lab'

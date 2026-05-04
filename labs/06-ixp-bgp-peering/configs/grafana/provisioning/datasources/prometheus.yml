@@ -1,0 +1,10 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    # La URL interna en Containerlab desde el bridge de docker
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false

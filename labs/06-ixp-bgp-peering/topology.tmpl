@@ -1,0 +1,22 @@
+name: {{ .Name }}
+prefix: ""
+
+mgmt:
+  network: clab
+  ipv4-subnet: {{ .MgmtSubnet }}
+
+topology:
+  nodes:{{ range .Nodes }}
+    {{ .Name }}:
+      kind: {{ .Kind }}{{ if .Image }}
+      image: {{ .Image }}{{ end }}{{ if .MgmtIPv4 }}
+      mgmt-ipv4: {{ .MgmtIPv4 }}{{ end }}{{ if .Ports }}
+      ports:{{ range .Ports }}
+        - {{ . }}{{ end }}{{ end }}{{ if .Binds }}
+      binds:{{ range .Binds }}
+        - {{ . }}{{ end }}{{ end }}{{ if .Exec }}
+      exec:{{ range .Exec }}
+        - {{ . }}{{ end }}{{ end }}{{ end }}
+
+  links:{{ range .Links }}
+    - endpoints: [{{ range $index, $element := .Endpoints }}{{ if $index }}, {{ end }}"{{ $element }}"{{ end }}]{{ end }}

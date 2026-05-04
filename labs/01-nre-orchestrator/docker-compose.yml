@@ -43,5 +43,28 @@ services:
       - "8000:8080"
     restart: unless-stopped
 
+  aico:
+    image: nre-agents:latest
+    command: ["./aico-agent"]
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-""}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-""}
+    depends_on:
+      - netbox
+    restart: unless-stopped
+    # Para poder acceder a las IPs de Containerlab, a menudo se usa:
+    network_mode: "host"
+
+  reconciler:
+    image: nre-agents:latest
+    command: ["./reconciler-agent"]
+    environment:
+      - NETBOX_URL=http://localhost:8000
+      - NETBOX_TOKEN=supersecretkeyreconciler12345
+    depends_on:
+      - netbox
+    restart: unless-stopped
+    network_mode: "host"
+
 volumes:
   netbox-postgres-data:

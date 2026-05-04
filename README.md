@@ -23,6 +23,18 @@ Each folder in `labs/` represents an isolated, production-ready implementation o
 *   Implements **strict Go concurrency patterns** (Worker Pools, Buffered Channels, Zero-Copy data structures).
 *   Includes **AICO (AI Consensus Orchestrator)**: An experimental feature that connects the orchestrator to a dual-LLM (Thinker/Auditor) pipeline to automatically resolve network anomalies using pure YANG models.
 
+### 2. `labs/08-ipfix-telemetry-collector` (New)
+**Technologies:** Go, IPFIX/NetFlow, Prometheus, Grafana, Docker
+*   A high-performance UDP telemetry collector built entirely in Go.
+*   Demonstrates **Zero-Copy binary decoding** of IPFIX structures to minimize Garbage Collector thrashing under multi-gigabit traffic loads.
+*   Features idempotent template caching, SRE-compliant graceful shutdown, and direct memory-to-Prometheus metric exposition (`promauto`).
+
+### 3. `labs/09-mikrotik-ai-failover-agent` (New)
+**Technologies:** Go, RouterOS v7 Containers, Gemini SDK
+*   An edge-computing agent that runs natively as a Docker container inside a MikroTik router's kernel.
+*   Extracts local routing state via REST API and delegates complex routing decisions (latency-based failover) to the Google Gemini AI.
+*   Demonstrates the usage of a multi-stage `FROM scratch` Dockerfile to produce a micro-sized (<15MB) Go binary ideal for Edge deployment.
+
 ### 2. `labs/02-mikrotik-ospf-mesh`
 **Technologies:** Containerlab, MikroTik RouterOS v7, OSPF
 *   A 4-node virtualized mesh topology simulating an ISP core.
